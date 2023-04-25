@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+        <title>Login</title>
+    </head>
+    
+    <body class="container">
+        <main class="row justify-content-start">
+            
+            <div class="container m-1 col-4 p-4 border border-danger rounded">
+                <h1>LOGIN</h1>
+
+                <!--EMAIL-->
+                  <label for="email" class="form-label">Email</label>
+                  <div class="input-group mb-3">
+                      <span class="input-group-text">✉</span>
+                      <!--<input type="text" id="todo_name" placeholder="Nombre de tarea" class="form-control" required>-->
+                      
+                      <!--<input type="text" id="email" placeholder="E-mail" class="form-control" required>-->
+                      <input type="text" id="email" name="email" placeholder="E-mail" />
+                    </div>
+
+                    
+
+                    <!--PASSWORD-->
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">🔒</span>
+                        <!--<input type="url" id="todo_url" placeholder="URL (opcional)" class="form-control">-->
+
+                        <!--<input type="password" id="password" placeholder="Password" class="form-control">-->
+                        <input type="password" id="password" name="password" placeholder="Password" />
+
+                    </div>
+
+                    <!--BOTONES-->
+                    
+                    <!--LOGIN BUTTON-->
+                    <div class="">
+                      <!--<button type="submit" id='btn_todo_form' class="btn btn-danger col-12">Guardar</button>-->
+                      <input type="submit" id='login' class="btn btn-danger col-12" value="Log in">
+                    </div>
+
+                  </br>
+                  
+                    <!--REGISTER BUTTON-->
+                    <div class="">
+                      <!--<button type="submit" id='btn_todo_form' class="btn btn-danger col-12">Guardar</button>-->
+                      <input type="submit" id='register' class="btn btn-danger col-12" value="Register"/>
+                    </div>
+
+
+                <div id="task_todo"></div>
+            </div>
+        </main>
+    </body>
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+      import { getDatabase, set, ref, update } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
+      import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCHNubjDGZZGF3tfYDYwRj7cbjopJvcSw4",
+            authDomain: "ejemplo-conexion-bddd.firebaseapp.com",
+            projectId: "ejemplo-conexion-bddd",
+            storageBucket: "ejemplo-conexion-bddd.appspot.com",
+            messagingSenderId: "63727665857",
+            appId: "1:63727665857:web:f4b320cebda5c76f588a40"
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const database = getDatabase(app);
+      const auth = getAuth();
+    
+    
+    
+      //REGISTRO USUARIOS
+    register.addEventListener('click',(e) => {
+      
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+    
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+         // Signed in 
+          const user = userCredential.user;
+    
+          set(ref(database, 'users/' + user.uid),{
+              email: email
+          })
+    
+          alert('user created!');
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+    
+          alert(errorMessage);
+        // ..
+        });
+    
+    });
+    
+    
+      //INICIO SESION/LOGIN USUARIOS
+       login.addEventListener('click',(e)=>{
+       var email = document.getElementById('email').value;
+       var password = document.getElementById('password').value;
+    
+          signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+    
+            const dt = new Date();
+             update(ref(database, 'users/' + user.uid),{
+              last_login: dt,
+            })
+    
+             alert('User loged in!');
+            // ...
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+    
+            alert(errorMessage);
+      });
+    
+     });
+    
+     
+    const user = auth.currentUser;
+    
+    logout.addEventListener('click',(e)=>{
+    
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      alert('user loged out');
+    }).catch((error) => {
+      // An error happened.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    
+         alert(errorMessage);
+    });
+    
+    });
+    
+    
+    
+    /*
+    Iniciar sesión de usuarios existentes
+    Cree un formulario que permita a los usuarios actuales iniciar sesión con su dirección de correo electrónico 
+    y contraseña. Llame a la función signInWithEmailAndPassword una vez que el usuario haya completado el formulario
+    */
+    /*
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        const uid = user.uid;
+        //bla bla bla
+        // ...
+      } else {
+        // User is signed out
+        // ...
+        //bla bla bla
+      }
+    });
+    */
+    
+    
+    /*
+    WEB DE DONDE SE OBTUVO LOGIN
+    
+    https://infotechwar.com/it-solutions/firebase-web-authentication-with-email-and-password/
+    */
+    </script>
+    
+    </html>
