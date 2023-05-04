@@ -7,7 +7,7 @@ let editState = false;
 let id = '';
 
 const createTask = (name, url, description) => {
-    db.collection('Cars').doc().set({
+    db.collection('tasks').doc().set({
         name,
         url,
         description
@@ -16,13 +16,13 @@ const createTask = (name, url, description) => {
 
 
 //Obtener el id del botón accionado
-const getCar = id => db.collection('Cars').doc(id).get();
+const getTask = id => db.collection('tasks').doc(id).get();
 
-const getCars = (callback) => db.collection('Cars').onSnapshot(callback);
+const getTasks = (callback) => db.collection('tasks').onSnapshot(callback);
 
-const deleteCar = id => db.collection('Cars').doc(id).delete();
+const deleteTask = id => db.collection('tasks').doc(id).delete();
 
-const updateCar = (id, updatedTask) => db.collection('Cars').doc(id).update(updatedTask);
+const updateTask = (id, updatedTask) => db.collection('tasks').doc(id).update(updatedTask);
 
 
 //Eliminamos la nota seleccionda
@@ -74,7 +74,6 @@ window.addEventListener('DOMContentLoaded', async (e) => {
     });
 });
 
-/*
 todoForm.addEventListener('submit', async e => {
     e.preventDefault();
     const name = todoForm['todo_name'].value;
@@ -93,25 +92,4 @@ todoForm.addEventListener('submit', async e => {
     todoForm.reset(); // Reseteamos los campos
 });
 
-*/
 
-
-
-todoForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const Brand = todoForm['todo_brand'].value;
-    const modelo = todoForm['todo_modelo'].value;
-    const description = todoForm['todo_description'].value;
-
-
-    if (!editState) {
-        await createTask(name, url, description); // Llamo a mi función create
-    } else {
-        await updateTask(id, {name, url, description});
-        editState = false;
-        id = '';
-        todoForm['btn_todo_form'].innerHTML = 'Guardar';
-    }
-
-    todoForm.reset(); // Reseteamos los campos
-});

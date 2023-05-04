@@ -1,0 +1,20 @@
+Marca
+
+Modelo
+
+Precio (Swith - Contado/Financiado)
+	Desde...		Hasta...
+
+Garantía(Swith)
+
+Año
+Desde...	Hasta...
+
+kilometros
+Desde...	Hasta...
+
+Tipo de cambio (Swith - Manual/Automatico)
+
+Tipo de combustible (Swith - Gasolina/Diesel)
+
+Potencia desde...	Hasta...
